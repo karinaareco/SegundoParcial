@@ -13,6 +13,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -34,46 +36,50 @@ fun ClimaView(
     state : ClimaEstado,
     onAction: (ClimaIntencion)->Unit
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(10.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        var ciudadABuscar by remember { mutableStateOf("")}
-Row {
-    OutlinedTextField(value = ciudadABuscar, onValueChange = {ciudadABuscar=it} )
-}
+    Scaffold (containerColor = Color(0xFFCDEDA3)
+    ){
+        Column(
+            modifier = modifier.padding(it)
+                .fillMaxWidth()
+                .padding(50.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            var ciudadABuscar by remember { mutableStateOf("")}
+            Row {
+                OutlinedTextField(value = ciudadABuscar, onValueChange = {ciudadABuscar=it} )
+            }
 
 
-        when(state){
-            is ClimaEstado.Ubicacion -> ErrorView(mensaje = state.ciudad)
-            is ClimaEstado.Exitoso -> ClimaView(
-                ciudad = state.ciudad,
-                temperatura = state.temperatura,
-                descripcion = state.descripcion,
-                st = state.st
-            )
-            ClimaEstado.Vacio -> EmptyView()
-            ClimaEstado.Cargando -> EmptyView()
-        }
+            when(state){
+                is ClimaEstado.Ubicacion -> ErrorView(mensaje = state.ciudad)
+                is ClimaEstado.Exitoso -> ClimaView(
+                    ciudad = state.ciudad,
+                    temperatura = state.temperatura,
+                    descripcion = state.descripcion,
+                    st = state.st
+                )
+                ClimaEstado.Vacio -> EmptyView()
+                ClimaEstado.Cargando -> EmptyView()
+            }
 
-        Spacer(modifier = Modifier.height(100.dp))
+            Spacer(modifier = Modifier.height(100.dp))
 
-        Button(onClick = { onAction(ClimaIntencion.BorrarTodo) }) {
-            Text(text = "Borrar todo")
-        }
-        Button(onClick = { onAction(ClimaIntencion.MostrarCaba) }) {
-            Text(text = "Mostrar Caba")
-        }
-        Button(onClick = { onAction(ClimaIntencion.MostrarCordoba) }) {
-            Text(text = "Mostrar Cordoba")
-        }
-        Button(onClick = { onAction(ClimaIntencion.MostrarUbicacion) }) {
-            Text(text = "Conocer ubicacion")
-           Image(painter = painterResource(id = R.drawable.logoubicacion), contentDescription = "Ubicacion")
+            Button(onClick = { onAction(ClimaIntencion.BorrarTodo) }) {
+                Text(text = "Borrar todo")
+            }
+            Button(onClick = { onAction(ClimaIntencion.MostrarCaba) }) {
+                Text(text = "Mostrar Caba")
+            }
+            Button(onClick = { onAction(ClimaIntencion.MostrarCordoba) }) {
+                Text(text = "Mostrar Cordoba")
+            }
+            Button(onClick = { onAction(ClimaIntencion.MostrarUbicacion) }) {
+                Text(text = "Conocer ubicacion")
+                Image(painter = painterResource(id = R.drawable.logoubicacion), contentDescription = "Ubicacion")
+            }
         }
     }
+
 }
 
 @Composable
