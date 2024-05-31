@@ -9,9 +9,17 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.materialIcon
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -33,49 +41,68 @@ import com.example.segundoparcial.ui.theme.SegundoParcialTheme
 @Composable
 fun ClimaView(
     modifier: Modifier = Modifier,
-    state : ClimaEstado,
-    onAction: (ClimaIntencion)->Unit
+    state: ClimaEstado,
+    onAction: (ClimaIntencion) -> Unit
 ) {
-    Scaffold (containerColor = Color(0xFFCDEDA3)
-    ){
+    Scaffold(
+        containerColor = Color(0xFFFFFFFF)
+    ) {
         Column(
-            modifier = modifier.padding(it)
+            modifier = modifier
+                .padding(it)
                 .fillMaxWidth()
                 .padding(50.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            var ciudadABuscar by remember { mutableStateOf("")}
+            var ciudadIngresada by remember { mutableStateOf("") }
             Row {
-                OutlinedTextField(value = ciudadABuscar, onValueChange = {ciudadABuscar=it} )
-            }
+                OutlinedTextField(
+                    value = ciudadIngresada,
+                    label = { Text("Buscar ubicacion") },
+                    onValueChange = { ciudadIngresada = it },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = null
+                        )
+                    }
+                )
+
+                }
 
 
-            when(state){
-                is ClimaEstado.Ubicacion -> ErrorView(mensaje = state.ciudad)
-                is ClimaEstado.Exitoso -> ClimaView(
+
+            when (state) {
+                is ClimaEstado.Error -> ErrorView(mensaje = state.mensaje)
+                is ClimaEstado.Exitoso -> climaView(
                     ciudad = state.ciudad,
                     temperatura = state.temperatura,
                     descripcion = state.descripcion,
                     st = state.st
+
                 )
+
                 ClimaEstado.Vacio -> EmptyView()
                 ClimaEstado.Cargando -> EmptyView()
             }
 
             Spacer(modifier = Modifier.height(100.dp))
 
-            Button(onClick = { onAction(ClimaIntencion.BorrarTodo) }) {
+            FilledTonalButton(onClick = { onAction(ClimaIntencion.BorrarTodo) },colors = ButtonDefaults.buttonColors(containerColor = Color.Black)) {
                 Text(text = "Borrar todo")
             }
-            Button(onClick = { onAction(ClimaIntencion.MostrarCaba) }) {
+            Button(onClick = { onAction(ClimaIntencion.MostrarCaba) },colors = ButtonDefaults.buttonColors(containerColor = Color.Black)) {
                 Text(text = "Mostrar Caba")
             }
-            Button(onClick = { onAction(ClimaIntencion.MostrarCordoba) }) {
+            Button(onClick = { onAction(ClimaIntencion.MostrarCordoba) },colors = ButtonDefaults.buttonColors(containerColor = Color.Black)) {
                 Text(text = "Mostrar Cordoba")
             }
-            Button(onClick = { onAction(ClimaIntencion.MostrarUbicacion) }) {
+            Button(onClick = { onAction(ClimaIntencion.MostrarUbicacion) }, colors = ButtonDefaults.buttonColors(containerColor = Color.Black)) {
                 Text(text = "Conocer ubicacion")
-                Image(painter = painterResource(id = R.drawable.logoubicacion), contentDescription = "Ubicacion")
+                Image(
+                    painter = painterResource(id = R.drawable.logoubicacion),
+                    contentDescription = "Ubicacion"
+                )
             }
         }
     }
@@ -83,17 +110,17 @@ fun ClimaView(
 }
 
 @Composable
-fun EmptyView(){
-    Text(text = "No hay nada que mostrar")
+fun EmptyView() {
+    Text(text = "")
 }
 
 @Composable
-fun ErrorView(mensaje: String){
+fun ErrorView(mensaje: String) {
     Text(text = mensaje)
 }
 
 @Composable
-fun ClimaView(ciudad: String, temperatura: Double, descripcion: String, st:Double){
+fun climaView(ciudad: String, temperatura: Double, descripcion: String, st: Double) {
     Column {
         Text(text = ciudad, style = MaterialTheme.typography.titleMedium)
         Text(text = "${temperatura}°", style = MaterialTheme.typography.titleLarge)
@@ -114,7 +141,7 @@ fun ClimaPreviewVacio() {
 @Composable
 fun ClimaPreviewUbicacion() {
     SegundoParcialTheme {
-        ClimaView(state = ClimaEstado.Ubicacion("Esta es la ubicacion"), onAction = {})
+
     }
 }
 

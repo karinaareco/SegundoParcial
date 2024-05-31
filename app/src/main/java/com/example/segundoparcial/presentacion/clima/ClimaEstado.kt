@@ -7,11 +7,8 @@ sealed class ClimaEstado {
         val descripcion: String= "",
         val st :Double = 0.0,
     ) : ClimaEstado()
-    data class Ubicacion(
-        val ciudad: String = "",
-        val imagenClima: Int = 0,
-        val descripcionClima: String = "",
-        val detalleAdicional: String = ""
+    data class Error(
+        val mensaje :String = "",
     ) : ClimaEstado()
     data object Vacio: ClimaEstado()
     data object Cargando: ClimaEstado()
