@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -15,6 +17,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -34,8 +37,11 @@ import com.google.firebase.crashlytics.buildtools.reloc.javax.annotation.meta.Wh
 fun CiudadesView(
     modifier: Modifier = Modifier,
     state: CiudadesEstado,
+    ciudades: List<Ciudad>,
     onAction: (CiudadesIntencion) -> Unit
 ) {
+
+
     Column(modifier = Modifier.padding(30.dp)) {
         var ciudadIngresada by remember { mutableStateOf("") }
 
@@ -46,8 +52,11 @@ fun CiudadesView(
             CiudadesEstado.Cargando -> TODO()
             is CiudadesEstado.Error -> ErrorView(mensaje = state.mensaje)
             is CiudadesEstado.Exitoso -> {
-
-                //corregir la logica aca para ver porque no funciona
+            LazyColumn {
+                items(items = ciudades){
+                    Text(text = it.name)
+                }
+            }
 
             }
 
@@ -66,10 +75,8 @@ fun CiudadesView(
     }
 
 
-
-
-
 }
+
 
 
 @Composable
@@ -96,19 +103,22 @@ fun ciudadesView(nombre: String, lat: Double, descripcion: String, lon: Double) 
 @Preview(showBackground = true)
 @Composable
 fun CiudadesPreviewVacio() {
+    val ciudades = remember { mutableStateListOf<Ciudad>()}
     SegundoParcialTheme {
-        CiudadesView(state = CiudadesEstado.Vacio, onAction = {})
+        CiudadesView(state = CiudadesEstado.Vacio, onAction = {},ciudades=ciudades)
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun CiudadesPreviewExitoso() {
+    val ciudades = remember { mutableStateListOf<Ciudad>()}
     SegundoParcialTheme {
+
         CiudadesView(
             state = CiudadesEstado.Exitoso(
                 Ciudad("Bs As", -1254.0, -18756.0, "Ar")
             ),
-            onAction = {})
+            onAction = {},ciudades=ciudades)
     }
 }

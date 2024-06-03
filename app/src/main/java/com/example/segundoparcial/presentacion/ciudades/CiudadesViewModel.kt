@@ -39,7 +39,7 @@ class CiudadesViewModel ( val respositorio: Repositorio): ViewModel() {
 
     fun ejecutarIntencion(intencion: CiudadesIntencion,ciudadIngresada: String = "") {
         when (intencion) {
-            CiudadesIntencion.borrarLista -> CiudadesEstado.Vacio
+            CiudadesIntencion.borrarLista ->borrarLista()
             CiudadesIntencion.mostrarLista -> mostrarLista(ciudadIngresada)
         }
     }
@@ -53,13 +53,13 @@ class CiudadesViewModel ( val respositorio: Repositorio): ViewModel() {
         val ciudadesFiltradas = ciudades.filter { ciudad ->
             ciudad.name.contains(ciudadIngresada, ignoreCase = true)
         }
-        if(ciudadesFiltradas.isNotEmpty()){
+        uiState = if(ciudadesFiltradas.isNotEmpty()){
 
 
-            uiState = CiudadesEstado.Exitoso(ciudadesFiltradas)
+             CiudadesEstado.Exitoso(ciudadesFiltradas)
         }
         else{
-            uiState = CiudadesEstado.Vacio
+             CiudadesEstado.Vacio
         }
 
 
