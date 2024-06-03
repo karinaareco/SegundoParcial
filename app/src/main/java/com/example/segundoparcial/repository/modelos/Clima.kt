@@ -13,7 +13,11 @@ data class Clima (
 
 @Serializable
 data class Clima2(
+    val coord: Coord,
+    val weather: List<Weather>,
     val base: String,
+    val main: Main,
+    val visibility: Long,
     val name: String,
 )
 @Serializable
@@ -31,9 +35,9 @@ data class Weather(
 @Serializable
 data class Main(
     val temp: Double,
-    val feelsLike: Double,
-    val tempMin: Double,
-    val tempMax: Double,
+    val feelsLike: Double = 0.0,
+    val tempMin: Double = 0.0,
+    val tempMax: Double = 0.0,
     val pressure: Long,
     val humidity: Long,
 )

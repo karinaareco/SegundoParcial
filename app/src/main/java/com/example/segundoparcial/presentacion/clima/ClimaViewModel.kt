@@ -22,10 +22,8 @@ class ClimaViewModel(
 ) : ViewModel() {
 
 
-
-
     companion object {
-        val factory : ViewModelProvider.Factory = viewModelFactory {
+        val factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val repositorio = RepositorioApi()
                 ClimaViewModel(repositorio)
@@ -46,10 +44,10 @@ class ClimaViewModel(
         estado = "Nublado",
 
 
-    )
+        )
 
-    fun ejecutar(intencion: ClimaIntencion){
-        when(intencion){
+    fun ejecutar(intencion: ClimaIntencion) {
+        when (intencion) {
             ClimaIntencion.BorrarTodo -> borrarTodo()
             ClimaIntencion.MostrarCaba -> mostrarCaba()
             ClimaIntencion.MostrarCordoba -> mostrarCordoba()
@@ -58,45 +56,44 @@ class ClimaViewModel(
     }
 
 
-
-    private fun mostrarUbicacion(){
+    private fun mostrarUbicacion() {
         uiState = ClimaEstado.Exitoso(
-        ciudad = climaBuenosAires.ciudad,
+            ciudad = climaBuenosAires.ciudad,
             temperatura = climaBuenosAires.temperatura.toDouble(),
             st = climaBuenosAires.st.toDouble()
+          //viewModelScope.launch {buscarCiudad(ciudad)}
 
         )
 
     }
 
-    private fun borrarTodo(){
+    private fun borrarTodo() {
         uiState = ClimaEstado.Vacio
     }
 
-    private fun mostrarCaba(){
+    private fun mostrarCaba() {
 
     }
 
-    private fun mostrarCordoba(){
-        uiState =ClimaEstado.Cargando
+    private fun mostrarCordoba() {
+        uiState = ClimaEstado.Cargando
         viewModelScope.launch {
             val cordoba = Ciudad(name = "Cordoba", lat = -31.4135, lon = -64.18105, state = "Ar")
-            try{
+            try {
                 val clima = respositorio.traerClima(cordoba)
                 uiState = ClimaEstado.Exitoso(
-                    ciudad = clima.name ,
-                    temperatura = 10.0,//clima.main.temp,
+                    ciudad = clima.name,
+                    temperatura = clima.main.temp,
                     descripcion = "asd",//clima.weather.first().description,
-                    st = 10.2//clima.main.feelsLike,
+                    st = clima.main.feelsLike,
                 )
-            } catch (exeption: Exception){
+            } catch (exeption: Exception) {
                 uiState = ClimaEstado.Error("error")
             }
 
 
         }
     }
-
 
 
 }

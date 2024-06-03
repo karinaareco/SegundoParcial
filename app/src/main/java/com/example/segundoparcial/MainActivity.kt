@@ -14,6 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.segundoparcial.presentacion.ciudades.BuenosAiresPage
+import com.example.segundoparcial.presentacion.ciudades.CiudadesView
+import com.example.segundoparcial.presentacion.ciudades.MainCiudadesPage
 import com.example.segundoparcial.presentacion.clima.MainPage
 import com.example.segundoparcial.ui.theme.SegundoParcialTheme
 
@@ -27,8 +29,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainPage()
+                    //MainPage()
                     //BuenosAiresPage()
+                    MainCiudadesPage()
+
                 }
                 }
             }

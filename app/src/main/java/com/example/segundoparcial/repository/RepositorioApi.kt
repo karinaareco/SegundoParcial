@@ -19,6 +19,8 @@ class RepositorioApi : Repositorio {
         install(ContentNegotiation){
             json(Json {
                 ignoreUnknownKeys = true
+                isLenient = true
+                explicitNulls = false
             })
         }
     }
@@ -43,6 +45,7 @@ class RepositorioApi : Repositorio {
             parameter("lon",ciudad.lon)
             parameter("units","metric")
             parameter("appid",apiKey)
+            parameter("lang", "sp")
         }
         if (respuesta.status == HttpStatusCode.OK){
             val clima = respuesta.body<Clima2>()
