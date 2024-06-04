@@ -37,7 +37,7 @@ import com.google.firebase.crashlytics.buildtools.reloc.javax.annotation.meta.Wh
 fun CiudadesView(
     modifier: Modifier = Modifier,
     state: CiudadesEstado,
-    ciudades: List<Ciudad>,
+    ciudades :List<Ciudad>,
     onAction: (CiudadesIntencion) -> Unit
 ) {
 
@@ -52,11 +52,19 @@ fun CiudadesView(
             CiudadesEstado.Cargando -> TODO()
             is CiudadesEstado.Error -> ErrorView(mensaje = state.mensaje)
             is CiudadesEstado.Exitoso -> {
-            LazyColumn {
-                items(items = ciudades){
-                    Text(text = it.name)
+
+
+                LazyColumn {
+                    items(items = ciudades){
+                        Text(text = it.name)
+                        Text(text = it.state)
+                        Text(text = "${it.lat}")
+                        Text(text = "${it.lon}")
+
+
+
+                    }
                 }
-            }
 
             }
 
@@ -103,22 +111,23 @@ fun ciudadesView(nombre: String, lat: Double, descripcion: String, lon: Double) 
 @Preview(showBackground = true)
 @Composable
 fun CiudadesPreviewVacio() {
-    val ciudades = remember { mutableStateListOf<Ciudad>()}
+    val ciudades = remember { mutableStateListOf<Ciudad>() }
     SegundoParcialTheme {
-        CiudadesView(state = CiudadesEstado.Vacio, onAction = {},ciudades=ciudades)
+        CiudadesView(state = CiudadesEstado.Vacio, onAction = {},ciudades = ciudades)
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun CiudadesPreviewExitoso() {
-    val ciudades = remember { mutableStateListOf<Ciudad>()}
+    val ciudades = remember { mutableStateListOf<Ciudad>() }
     SegundoParcialTheme {
 
         CiudadesView(
             state = CiudadesEstado.Exitoso(
-                Ciudad("Bs As", -1254.0, -18756.0, "Ar")
+                "Bs As", -1254.0, -18756.0, "Ar"
             ),
-            onAction = {},ciudades=ciudades)
+            onAction = {},
+            ciudades = ciudades)
     }
 }

@@ -11,6 +11,11 @@ import com.example.segundoparcial.presentacion.clima.ClimaViewModel
 import com.example.segundoparcial.repository.Repositorio
 import com.example.segundoparcial.repository.RepositorioApi
 import com.example.segundoparcial.repository.modelos.Ciudad
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 
 class CiudadesViewModel ( val respositorio: Repositorio): ViewModel() {
 
@@ -23,9 +28,31 @@ class CiudadesViewModel ( val respositorio: Repositorio): ViewModel() {
         }
     }
 
+
     var uiState by mutableStateOf<CiudadesEstado>(CiudadesEstado.Vacio)
 
-    var ciudades: List<Ciudad> = listOf(
+
+    private val _ciudades = MutableStateFlow<List<Ciudad>>(emptyList())
+    val ciudades: StateFlow<List<Ciudad>> = _ciudades
+    private fun mostrarLista(ciudadIngresada:String) {
+        val ciudadesFiltradas = todasLasCiudades.filter { ciudad ->
+            ciudad.name.contains(ciudadIngresada, ignoreCase = true)
+        }
+        _ciudades.value = ciudadesFiltradas
+        uiState = if(ciudadesFiltradas.isNotEmpty()){
+
+
+            CiudadesEstado.Exitoso()
+        }
+        else{
+            CiudadesEstado.Vacio
+        }
+
+
+    }
+
+
+   val todasLasCiudades = listOf(
 
         Ciudad("Cordoba", -31.4135000, -64.1810500, "Cordoba Provincia"),
         Ciudad("Cordoba", -3.4135000, -104.1810500, "España"),
@@ -49,21 +76,7 @@ class CiudadesViewModel ( val respositorio: Repositorio): ViewModel() {
     }
 
 
-    private fun mostrarLista(ciudadIngresada:String) {
-        val ciudadesFiltradas = ciudades.filter { ciudad ->
-            ciudad.name.contains(ciudadIngresada, ignoreCase = true)
-        }
-        uiState = if(ciudadesFiltradas.isNotEmpty()){
 
-
-             CiudadesEstado.Exitoso(ciudadesFiltradas)
-        }
-        else{
-             CiudadesEstado.Vacio
-        }
-
-
-    }
 }
 
 

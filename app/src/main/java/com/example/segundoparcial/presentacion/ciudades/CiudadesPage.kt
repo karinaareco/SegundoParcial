@@ -9,14 +9,15 @@ import com.example.segundoparcial.repository.modelos.Ciudad
 
 @Composable
 fun MainCiudadesPage(){
-    val ciudades = remember { mutableStateListOf<Ciudad>() }
+
     val viewModel : CiudadesViewModel = viewModel(factory = CiudadesViewModel.factory)
+    val ciudades = remember { mutableStateListOf<Ciudad>() }
     CiudadesView(
 
-        state = viewModel.uiState,
         ciudades = ciudades,
-        onAction = { intencion ->
-            viewModel.ejecutarIntencion(intencion)
+        state = viewModel.uiState,
+        onAction = { intencion -> viewModel.ejecutarIntencion(intencion)
+
         }
     )
 }
