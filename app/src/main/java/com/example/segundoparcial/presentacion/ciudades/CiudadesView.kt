@@ -3,16 +3,20 @@ package com.example.segundoparcial.presentacion.ciudades
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
@@ -22,6 +26,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -40,47 +46,63 @@ fun CiudadesView(
     ciudades :List<Ciudad>,
     onAction: (CiudadesIntencion) -> Unit
 ) {
+ Scaffold(containerColor = Color(0xFF004D34)) {
+     Column(modifier = Modifier.padding(it)) {
+         var ciudadIngresada by remember { mutableStateOf("") }
+
+         OutlinedTextField(value = ciudadIngresada,
+             onValueChange = { ciudadIngresada = it },
+             modifier = modifier
+                 .fillMaxWidth(),
+             colors = TextFieldDefaults.textFieldColors(containerColor = Color.Unspecified),
+             label = { Text(text = "Buscar ubicacion",
+                 color = Color.Black)},
+
+             )
 
 
-    Column(modifier = Modifier.padding(30.dp)) {
-        var ciudadIngresada by remember { mutableStateOf("") }
-
-        TextField(value = ciudadIngresada, onValueChange = { ciudadIngresada = it })
-
-
-        when (state) {
-            CiudadesEstado.Cargando -> TODO()
-            is CiudadesEstado.Error -> ErrorView(mensaje = state.mensaje)
-            is CiudadesEstado.Exitoso -> {
+         when (state) {
+             CiudadesEstado.Cargando -> TODO()
+             is CiudadesEstado.Error -> ErrorView(mensaje = state.mensaje)
+             is CiudadesEstado.Exitoso -> {
 
 
-                LazyColumn {
-                    items(items = ciudades){
-                        Text(text = it.name)
-                        Text(text = it.state)
-                        Text(text = "${it.lat}")
-                        Text(text = "${it.lon}")
+                 LazyColumn {
+                     items(items = ciudades){
+                         Text(text = it.name)
+                         Text(text = it.state)
+                         Text(text = "${it.lat}")
+                         Text(text = "${it.lon}")
 
 
 
-                    }
-                }
+                     }
+                 }
 
-            }
+             }
 
-            CiudadesEstado.Vacio -> EmptyView()
-        }
+             CiudadesEstado.Vacio -> EmptyView()
+         }
 
-        Button(onClick = { onAction(CiudadesIntencion.borrarLista) }) {
-            Text(text = "Borrar lista")
+         Button(onClick = { onAction(CiudadesIntencion.borrarLista) },
+             colors = ButtonDefaults.buttonColors(containerColor = Color.Black)) {
+             Text(text = "Borrar lista",
+                 color= Color.White
+             )
 
-        }
-        Button(onClick = { onAction(CiudadesIntencion.mostrarLista) }) {
-            Text(text = "Buscar Ciudad")
-        }
+         }
+         Button(onClick = { onAction(CiudadesIntencion.mostrarLista) },
+             colors = ButtonDefaults.buttonColors(containerColor = Color.Black)) {
+             Text(text = "Buscar Ciudad",
+                 color= Color.White)
+         }
 
 
-    }
+     }
+
+ }
+
+
 
 
 }

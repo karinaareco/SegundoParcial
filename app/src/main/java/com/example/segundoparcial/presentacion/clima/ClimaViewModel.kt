@@ -61,7 +61,7 @@ class ClimaViewModel(
             ciudad = climaBuenosAires.ciudad,
             temperatura = climaBuenosAires.temperatura.toDouble(),
             st = climaBuenosAires.st.toDouble()
-          //viewModelScope.launch {buscarCiudad(ciudad)}
+
 
         )
 
