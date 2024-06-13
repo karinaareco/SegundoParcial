@@ -67,16 +67,15 @@ fun CiudadesView(
                         CiudadesIntencion.Seleccionar(it)
                     )
                 }
-
                 is CiudadesEstado.Vacio -> Text(text = "")
             }
 
             Button(
-                onClick = { onAction(CiudadesIntencion.Seleccionar(0)) },
+                onClick = { onAction(CiudadesIntencion.Seleccionar(0.0)) },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
             ) {
                 Text(
-                    text = "Seleccionar",
+                    text = "Mostrar Clima",
                     color = Color.White
                 )
 
@@ -102,7 +101,7 @@ fun CiudadesView(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ListaDeCiudades(ciudades: List<Ciudad>, onSelect: (Int)->Unit){
+fun ListaDeCiudades(ciudades: Array<Ciudad>, onSelect: (Double)->Unit){
 
     LazyColumn (
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
@@ -110,7 +109,7 @@ fun ListaDeCiudades(ciudades: List<Ciudad>, onSelect: (Int)->Unit){
         items(items = ciudades){
             Card (
 
-                onClick = { onSelect(0) },
+                onClick = { onSelect(0.0) },
                 colors = CardDefaults.cardColors(
                     containerColor = Color.Black
                 )
@@ -119,6 +118,8 @@ fun ListaDeCiudades(ciudades: List<Ciudad>, onSelect: (Int)->Unit){
             ){
 
                 Text(text = it.name,
+                    color = Color.White)
+                Text(text = it.state,
                     color = Color.White)
             }
         }

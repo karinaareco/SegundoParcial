@@ -17,9 +17,6 @@ class ClimaViewModel(
     val router: Router
 ) : ViewModel() {
 
-
-
-
     var uiState by mutableStateOf<ClimaEstado>(ClimaEstado.Vacio)
 
     private val climaBuenosAires = Clima(
@@ -31,8 +28,6 @@ class ClimaViewModel(
         latitud = 151515151,
         longitud = 252525252,
         estado = "Nublado",
-
-
         )
 
     fun ejecutar(intencion: ClimaIntencion) {
@@ -50,10 +45,7 @@ class ClimaViewModel(
             ciudad = climaBuenosAires.ciudad,
             temperatura = climaBuenosAires.temperatura.toDouble(),
             st = climaBuenosAires.st.toDouble()
-
-
         )
-
     }
 
     private fun borrarTodo() {
@@ -61,7 +53,6 @@ class ClimaViewModel(
     }
 
     private fun mostrarCaba() {
-
     }
 
     private fun mostrarCordoba() {
@@ -79,8 +70,24 @@ class ClimaViewModel(
             } catch (exeption: Exception) {
                 uiState = ClimaEstado.Error("error")
             }
+        }
+    }
 
-
+    private fun mostrarCiudad(ciudad: Ciudad) {
+        uiState = ClimaEstado.Cargando
+        viewModelScope.launch {
+            //val ciudad = Ciudad(name = ciudad.name, lat = ciudad.lat, lon = ciudad.lon, state = ciudad.state)
+            try {
+                val clima = respositorio.traerClima(ciudad)
+                uiState = ClimaEstado.Exitoso(
+                    ciudad = clima.name,
+                    temperatura = clima.main.temp,
+                    descripcion = "asd",//clima.weather.first().description,
+                    st = clima.main.feelsLike,
+                )
+            } catch (exeption: Exception) {
+                uiState = ClimaEstado.Error("error")
+            }
         }
     }
 
@@ -91,11 +98,9 @@ class ClimaViewModel(
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(ClimaViewModel::class.java)) {
-                return ClimaViewModel(repositorio,router) as T
+                return ClimaViewModel(repositorio, router) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
-
-
 }

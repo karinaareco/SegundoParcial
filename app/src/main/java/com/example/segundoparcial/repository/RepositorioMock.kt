@@ -4,7 +4,7 @@ import com.example.segundoparcial.repository.modelos.Ciudad
 import com.example.segundoparcial.repository.modelos.Clima2
 
 class RepositorioMock  : Repositorio {
-    override suspend fun buscarCiudad(ciudad: String): List<Ciudad> {
+    override suspend fun buscarCiudad(ciudad: String): Array<Ciudad> {
         val ciudad1 = Ciudad(name = "jojo",
             lat = -23.0,
             lon = -24.3,
@@ -17,7 +17,7 @@ class RepositorioMock  : Repositorio {
             lat = -23.0,
             lon = -24.3,
             state = "Argentina")
-        return listOf(ciudad1,ciudad2,ciudad3)
+        return arrayOf(ciudad1,ciudad2,ciudad3)
     }
 
     override suspend fun traerClima(ciudad: Ciudad): Clima2 {

@@ -15,6 +15,7 @@ import kotlinx.serialization.json.Json
 class RepositorioApi : Repositorio {
 
     private val apiKey = "6a3a6c683a25f9f951be7f71806c3fb7" //Ya puse mi key
+
     private val cliente = HttpClient(){
         install(ContentNegotiation){
             json(Json {
@@ -25,14 +26,14 @@ class RepositorioApi : Repositorio {
         }
     }
 
-    override suspend fun buscarCiudad(ciudad: String): List<Ciudad> {
+    override suspend fun buscarCiudad(ciudad: String): Array<Ciudad> {
         val respuesta = cliente.get("https://api.openweathermap.org/geo/1.0/direct"){
             parameter("q",ciudad)
             parameter("limit",5)
             parameter("appid",apiKey)
         }
         if (respuesta.status == HttpStatusCode.OK){
-            val ciudades = respuesta.body<List<Ciudad>>()
+            val ciudades = respuesta.body<Array<Ciudad>>()
             return ciudades
         }else{
             throw Exception()

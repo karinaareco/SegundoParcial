@@ -5,10 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.example.segundoparcial.repository.Repositorio
 import com.example.segundoparcial.repository.modelos.Ciudad
 import com.example.segundoparcial.router.Router
 import com.example.segundoparcial.router.Ruta
+import kotlinx.coroutines.launch
 
 class CiudadesViewModel(
     val respositorio: Repositorio,
@@ -32,7 +34,7 @@ class CiudadesViewModel(
 
 
 
-    fun buscar( ciudadIngresada: String) {
+    /*fun buscar( ciudadIngresada: String) {
         val  ciudadesFiltradas : List<Ciudad> = todasLasCiudades.filter { ciudad ->
             ciudad.name.contains(ciudadIngresada, ignoreCase = true)
         }
@@ -42,9 +44,27 @@ class CiudadesViewModel(
         } else {
             CiudadesEstado.Vacio
         }
+    }*/
+
+     private fun buscar(ciudadIngresada:String){
+
+        uiState = CiudadesEstado.Cargando
+
+         viewModelScope.launch{
+
+             try {
+                 val listaDeCiudades = respositorio.buscarCiudad(ciudadIngresada)
+                 uiState = CiudadesEstado.Resultado(listaDeCiudades)
+
+             }catch (exeption: Exception){
+                 uiState = CiudadesEstado.Error("Error al buscar ciudad")
+             }
+
+         }
+
     }
 
-   fun ejecutarIntencion(intencion: CiudadesIntencion){
+    fun ejecutarIntencion(intencion: CiudadesIntencion){
        when(intencion){
            is CiudadesIntencion.Buscar -> buscar(ciudadIngresada = intencion.nombre)
            is CiudadesIntencion.Seleccionar -> seleccionar(indice = intencion.indice)
@@ -52,7 +72,7 @@ class CiudadesViewModel(
 
    }
 
-    private fun seleccionar(indice: Int) {
+    private fun seleccionar(indice: Double) {
         uiState = CiudadesEstado.Vacio
         router.navegar(Ruta.Clima())
     }}
