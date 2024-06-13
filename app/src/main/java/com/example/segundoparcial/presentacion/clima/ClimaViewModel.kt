@@ -1,35 +1,24 @@
 package com.example.segundoparcial.presentacion.clima
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.segundoparcial.R
 import com.example.segundoparcial.repository.Repositorio
-import com.example.segundoparcial.repository.RepositorioApi
 import com.example.segundoparcial.repository.modelos.Ciudad
 import com.example.segundoparcial.repository.modelos.Clima
+import com.example.segundoparcial.router.Router
 import kotlinx.coroutines.launch
 
 class ClimaViewModel(
-    val respositorio: Repositorio
+    val respositorio: Repositorio,
+    val router: Router
 ) : ViewModel() {
 
 
-    companion object {
-        val factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val repositorio = RepositorioApi()
-                ClimaViewModel(repositorio)
-            }
-        }
-    }
+
 
     var uiState by mutableStateOf<ClimaEstado>(ClimaEstado.Vacio)
 
@@ -92,6 +81,19 @@ class ClimaViewModel(
             }
 
 
+        }
+    }
+
+    class ClimaViewModelFactory(
+        private val repositorio: Repositorio,
+        private val router: Router
+    ) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(ClimaViewModel::class.java)) {
+                return ClimaViewModel(repositorio,router) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
 

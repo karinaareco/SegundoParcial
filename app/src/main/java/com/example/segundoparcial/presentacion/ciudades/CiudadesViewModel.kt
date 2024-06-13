@@ -5,55 +5,26 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.segundoparcial.presentacion.clima.ClimaViewModel
 import com.example.segundoparcial.repository.Repositorio
-import com.example.segundoparcial.repository.RepositorioApi
 import com.example.segundoparcial.repository.modelos.Ciudad
+import com.example.segundoparcial.router.Router
+import com.example.segundoparcial.router.Ruta
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.update
 
-class CiudadesViewModel ( val respositorio: Repositorio): ViewModel() {
-
-    companion object {
-        val factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val repositorio = RepositorioApi()
-                CiudadesViewModel(repositorio)
-            }
-        }
-    }
-
+class CiudadesViewModel(
+    val respositorio: Repositorio,
+    val router: Router
+) : ViewModel() {
+    var ciudadIngresada by mutableStateOf("lalala")
 
     var uiState by mutableStateOf<CiudadesEstado>(CiudadesEstado.Vacio)
 
-
     private val _ciudades = MutableStateFlow<List<Ciudad>>(emptyList())
+
     val ciudades: StateFlow<List<Ciudad>> = _ciudades
-    private fun mostrarLista(ciudadIngresada:String) {
-        val ciudadesFiltradas = todasLasCiudades.filter { ciudad ->
-            ciudad.name.contains(ciudadIngresada, ignoreCase = true)
-        }
-        _ciudades.value = ciudadesFiltradas
-        uiState = if(ciudadesFiltradas.isNotEmpty()){
 
-
-            CiudadesEstado.Exitoso()
-        }
-        else{
-            CiudadesEstado.Vacio
-        }
-
-
-    }
-
-
-   val todasLasCiudades = listOf(
-
+    val todasLasCiudades = listOf(
         Ciudad("Cordoba", -31.4135000, -64.1810500, "Cordoba Provincia"),
         Ciudad("Cordoba", -3.4135000, -104.1810500, "España"),
         Ciudad("Cordoba", -3.4135000, -104.1810500, "Mexico"),
@@ -64,23 +35,43 @@ class CiudadesViewModel ( val respositorio: Repositorio): ViewModel() {
     )
 
 
-    fun ejecutarIntencion(intencion: CiudadesIntencion,ciudadIngresada: String = "") {
-        when (intencion) {
-            CiudadesIntencion.borrarLista ->borrarLista()
-            CiudadesIntencion.mostrarLista -> mostrarLista(ciudadIngresada)
+
+    fun buscar( ciudadIngresada: String) {
+        val  ciudadesFiltradas : List<Ciudad> = todasLasCiudades.filter { ciudad ->
+            ciudad.name.contains(ciudadIngresada, ignoreCase = true)
+        }
+
+        uiState = if (ciudadesFiltradas.isNotEmpty()) {
+            CiudadesEstado.Resultado(ciudadesFiltradas)
+        } else {
+            CiudadesEstado.Vacio
         }
     }
 
-    private fun borrarLista(){
+   fun ejecutarIntencion(intencion: CiudadesIntencion){
+       when(intencion){
+           is CiudadesIntencion.Buscar -> buscar(ciudadIngresada = intencion.nombre)
+           is CiudadesIntencion.Seleccionar -> seleccionar(indice = intencion.indice)
+       }
+
+   }
+
+    private fun seleccionar(indice: Int) {
         uiState = CiudadesEstado.Vacio
+        router.navegar(Ruta.Clima())
+    }}
+
+class CiudadesViewModelFactory(
+    private val repositorio: Repositorio,
+    private val router: Router
+) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(CiudadesViewModel::class.java)) {
+            return CiudadesViewModel(repositorio,router) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
-
-
-
 }
-
-
-
-
 
 

@@ -4,6 +4,6 @@ import com.example.segundoparcial.presentacion.clima.ClimaIntencion
 
 sealed class CiudadesIntencion {
 
-    object mostrarLista: CiudadesIntencion()
-    object borrarLista: CiudadesIntencion()
+    data class Buscar( val nombre:String ) : CiudadesIntencion()
+    data class Seleccionar(val indice: Int) : CiudadesIntencion()//Hay que modif
 }

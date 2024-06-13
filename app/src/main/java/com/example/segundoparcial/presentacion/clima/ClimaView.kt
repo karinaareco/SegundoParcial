@@ -2,7 +2,6 @@ package com.example.segundoparcial.presentacion.clima
 
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -23,7 +21,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,14 +29,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-
+import androidx.navigation.compose.rememberNavController
 import com.example.segundoparcial.R
-import com.example.segundoparcial.presentacion.ciudades.CiudadesEstado
-
 import com.example.segundoparcial.ui.theme.SegundoParcialTheme
 
 
@@ -69,7 +63,7 @@ fun ClimaView(
                     leadingIcon = {
                         Button(
                             onClick = {
-                                //aca tiene que navegar a ciudades
+
                             },
                             colors = ButtonDefaults.buttonColors(containerColor = Color.Unspecified)
                         ) {
@@ -196,7 +190,8 @@ fun climaView(ciudad: String, temperatura: Double, descripcion: String, st: Doub
 @Composable
 fun ClimaPreviewVacio() {
     SegundoParcialTheme {
-        ClimaView(state = ClimaEstado.Vacio, onAction = { })
+        val navController = rememberNavController()
+        ClimaView(state = ClimaEstado.Vacio, onAction = { } )
     }
 }
 
@@ -212,6 +207,7 @@ fun ClimaPreviewUbicacion() {
 @Composable
 fun ClimaPreviewExitoso() {
     SegundoParcialTheme {
+        val navController = rememberNavController()
         ClimaView(state = ClimaEstado.Exitoso(ciudad = "Mendoza", temperatura = 0.0), onAction = {})
     }
 }
