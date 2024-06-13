@@ -84,7 +84,7 @@ fun ClimaView(
 
 
             when (state) {
-                ClimaEstado.Cargando -> TODO()
+                ClimaEstado.Cargando -> EmptyView()
                 is ClimaEstado.Error -> ErrorView(mensaje = state.mensaje)
                 is ClimaEstado.Exitoso -> climaView(
                     ciudad = state.ciudad,

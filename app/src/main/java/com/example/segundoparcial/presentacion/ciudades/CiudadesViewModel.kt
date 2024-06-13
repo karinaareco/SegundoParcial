@@ -9,20 +9,16 @@ import com.example.segundoparcial.repository.Repositorio
 import com.example.segundoparcial.repository.modelos.Ciudad
 import com.example.segundoparcial.router.Router
 import com.example.segundoparcial.router.Ruta
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 
 class CiudadesViewModel(
     val respositorio: Repositorio,
     val router: Router
 ) : ViewModel() {
-    var ciudadIngresada by mutableStateOf("lalala")
+
 
     var uiState by mutableStateOf<CiudadesEstado>(CiudadesEstado.Vacio)
 
-    private val _ciudades = MutableStateFlow<List<Ciudad>>(emptyList())
 
-    val ciudades: StateFlow<List<Ciudad>> = _ciudades
 
     val todasLasCiudades = listOf(
         Ciudad("Cordoba", -31.4135000, -64.1810500, "Cordoba Provincia"),

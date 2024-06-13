@@ -1,6 +1,8 @@
 package com.example.segundoparcial.presentacion.ciudades
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -8,6 +10,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -20,7 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-
+import androidx.compose.ui.unit.dp
 import com.example.segundoparcial.repository.modelos.Ciudad
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -34,10 +37,10 @@ fun CiudadesView(
         Column(modifier = Modifier.padding(it)) {
             var ciudadIngresada by remember { mutableStateOf("") }
             OutlinedTextField(
-                value = ciudadIngresada, //searchState.name,
+                value = ciudadIngresada,
                 onValueChange = {
                     ciudadIngresada = it
-                    onAction(CiudadesIntencion.Buscar(ciudadIngresada))
+                    //onAction(CiudadesIntencion.Buscar(ciudadIngresada))
                 },
 
                 modifier = modifier
@@ -65,7 +68,7 @@ fun CiudadesView(
                     )
                 }
 
-                is CiudadesEstado.Vacio -> Text(text = "No hay resultados")
+                is CiudadesEstado.Vacio -> Text(text = "")
             }
 
             Button(
@@ -73,13 +76,13 @@ fun CiudadesView(
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
             ) {
                 Text(
-                    text = "Borrar lista",
+                    text = "Seleccionar",
                     color = Color.White
                 )
 
             }
             Button(
-                onClick = { onAction(CiudadesIntencion.Buscar("")) },
+                onClick = { onAction(CiudadesIntencion.Buscar(ciudadIngresada)) },
 
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
             ) {
@@ -101,10 +104,22 @@ fun CiudadesView(
 @Composable
 fun ListaDeCiudades(ciudades: List<Ciudad>, onSelect: (Int)->Unit){
 
-    LazyColumn {
+    LazyColumn (
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp)) {
         items(items = ciudades){
-            Card (onClick = { onSelect(0) }){
-                Text(text = it.name)
+            Card (
+
+                onClick = { onSelect(0) },
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.Black
+                )
+
+
+            ){
+
+                Text(text = it.name,
+                    color = Color.White)
             }
         }
     }
