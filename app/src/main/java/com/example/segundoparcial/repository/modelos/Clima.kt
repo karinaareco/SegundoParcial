@@ -2,13 +2,14 @@ package com.example.segundoparcial.repository.modelos
 import kotlinx.serialization.Serializable
 data class Clima (
     val temperatura: Int,
-    val humedad: Float,
+    val humedad: Long,
     val ciudad: String,
     val st: Int,
     val viento: Int,
     val latitud: Long,
     val longitud: Long,
-    val estado: String
+    val estado: String,
+
 )
 
 @Serializable

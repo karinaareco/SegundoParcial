@@ -21,7 +21,7 @@ class ClimaViewModel(
 
     private val climaBuenosAires = Clima(
         temperatura = 20,
-        humedad = 8.0F,
+        humedad = 8L,
         ciudad = "Buenos Aires",
         st = 12,
         viento = 90,
@@ -44,7 +44,8 @@ class ClimaViewModel(
         uiState = ClimaEstado.Exitoso(
             ciudad = climaBuenosAires.ciudad,
             temperatura = climaBuenosAires.temperatura.toDouble(),
-            st = climaBuenosAires.st.toDouble()
+            st = climaBuenosAires.st.toDouble(),
+
         )
     }
 
@@ -64,8 +65,10 @@ class ClimaViewModel(
                 uiState = ClimaEstado.Exitoso(
                     ciudad = clima.name,
                     temperatura = clima.main.temp,
-                    descripcion = "asd",//clima.weather.first().description,
+                    descripcion = clima.main.humidity,
                     st = clima.main.feelsLike,
+
+
                 )
             } catch (exeption: Exception) {
                 uiState = ClimaEstado.Error("error")

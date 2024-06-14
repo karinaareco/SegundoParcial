@@ -9,7 +9,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.segundoparcial.repository.Repositorio
 import com.example.segundoparcial.repository.modelos.Ciudad
 import com.example.segundoparcial.router.Router
-import com.example.segundoparcial.router.Ruta
 import kotlinx.coroutines.launch
 
 class CiudadesViewModel(
@@ -68,8 +67,9 @@ class CiudadesViewModel(
                 uiState = CiudadesEstado.Exitoso(
                     ciudad = ciudad.name,
                     temperatura = ciudad.main.temp,
-                    descripcion = "asd",//clima.weather.first().description,
-                    st = ciudad.main.feelsLike,
+                    descripcion = ciudad.main.humidity,
+                    st = ciudad.main.feelsLike
+
                 )
             } catch (exeption: Exception) {
                 uiState = CiudadesEstado.Error("error")
@@ -80,18 +80,13 @@ class CiudadesViewModel(
     fun ejecutarIntencion(intencion: CiudadesIntencion) {
         when (intencion) {
             is CiudadesIntencion.Buscar -> buscar(ciudadIngresada = intencion.nombre)
-            is CiudadesIntencion.Seleccionar -> seleccionar(indice = intencion.indice)
+
             is CiudadesIntencion.MostraClima -> mostraClimaDeCiudad(ciudad = intencion.ciudad)
         }
 
     }
 
-    private fun seleccionar(indice: Double) {
-        uiState = CiudadesEstado.Vacio
 
-        router.navegar(Ruta.Clima())
-
-    }
 }
 
 class CiudadesViewModelFactory(

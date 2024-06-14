@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import com.example.segundoparcial.presentacion.clima.climaView
 import com.example.segundoparcial.repository.modelos.Ciudad
@@ -40,10 +41,12 @@ fun CiudadesView(
             var ciudadIngresada by remember { mutableStateOf("") }
             OutlinedTextField(
                 value = ciudadIngresada,
+
                 onValueChange = {
                     ciudadIngresada = it
                     //onAction(CiudadesIntencion.Buscar(ciudadIngresada))
                 },
+                textStyle = TextStyle(color = Color.White),
 
                 modifier = modifier
                     .fillMaxWidth(),
@@ -55,7 +58,7 @@ fun CiudadesView(
                 label = {
                     Text(
                         text = "Buscar ubicacion",
-                        color = Color.Black
+                        color = Color.White
                     )
                 },
             )
@@ -67,34 +70,28 @@ fun CiudadesView(
                     ciudades = state.ciudades,
                     onAction = onAction
                 )
+
                 is CiudadesEstado.Vacio -> Text(text = "")
                 is CiudadesEstado.Exitoso -> climaView(
                     ciudad = state.ciudad,
                     temperatura = state.temperatura,
                     descripcion = state.descripcion,
                     st = state.st
+
                 )
             }
 
-            Button(
-                onClick = { onAction(CiudadesIntencion.Seleccionar(0.0)) },
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
-            ) {
-                Text(
-                    text = "Seleccionar Ciudad",
-                    color = Color.White
-                )
-            }
-            Button(
-                onClick = { onAction(CiudadesIntencion.Buscar(ciudadIngresada)) },
+                  Button(
+                      onClick = { onAction(CiudadesIntencion.Buscar(ciudadIngresada)) },
 
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
-            ) {
-                Text(
-                    text = "Buscar Ciudad",
-                    color = Color.White
-                )
-            }
+                      colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
+                  ) {
+                      Text(
+                          text = "Ver Ciudad",
+                          color = Color.White
+                      )
+                  }
+
         }
     }
 }
@@ -135,8 +132,10 @@ fun ListaDeCiudades(ciudades: Array<Ciudad>, onAction: (CiudadesIntencion) -> Un
                         text = "${it.lon}",
                         color = Color.White
                     )
-                    Button(onClick = { onAction(CiudadesIntencion.MostraClima(it)) }) {
-                        Text(text = "Ver Clima")
+                    Button(onClick = { onAction(CiudadesIntencion.MostraClima(it)) },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.White)) {
+                        Text(text = "Ver Clima",
+                            color = Color.Black)
 
                     }
 

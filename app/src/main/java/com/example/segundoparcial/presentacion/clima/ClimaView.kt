@@ -92,6 +92,7 @@ fun ClimaView(
                     descripcion = state.descripcion,
                     st = state.st
 
+
                 )
 
                 ClimaEstado.Vacio -> EmptyView()
@@ -146,10 +147,12 @@ fun ErrorView(mensaje: String) {
 }
 
 @Composable
-fun climaView(ciudad: String, temperatura: Double, descripcion: String, st: Double) {
-    Column(modifier = Modifier
-        .padding(20.dp)
-        .fillMaxWidth()) {
+fun climaView(ciudad: String, temperatura: Double, descripcion: Long, st: Double) {
+    Column(
+        modifier = Modifier
+            .padding(20.dp)
+            .fillMaxWidth()
+    ) {
         Card(
             modifier = Modifier
                 .size(width = 340.dp, height = 150.dp)
@@ -159,15 +162,19 @@ fun climaView(ciudad: String, temperatura: Double, descripcion: String, st: Doub
             )
 
         ) {
-            Column ( modifier = Modifier.padding(16.dp)){
-                Text(text = ciudad, style = MaterialTheme.typography.titleMedium, color = Color.White)
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(
+                    text = ciudad,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = Color.White
+                )
                 Text(
                     text = "${temperatura}°",
                     style = MaterialTheme.typography.titleLarge,
                     color = Color.White
                 )
                 Text(
-                    text = descripcion,
+                    text = "Humedad: ${descripcion} %",
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color.White
                 )
@@ -177,8 +184,8 @@ fun climaView(ciudad: String, temperatura: Double, descripcion: String, st: Doub
                     color = Color.White
                 )
 
-            }
 
+            }
 
 
         }
@@ -191,7 +198,7 @@ fun climaView(ciudad: String, temperatura: Double, descripcion: String, st: Doub
 fun ClimaPreviewVacio() {
     SegundoParcialTheme {
         val navController = rememberNavController()
-        ClimaView(state = ClimaEstado.Vacio, onAction = { } )
+        ClimaView(state = ClimaEstado.Vacio, onAction = { })
     }
 }
 
