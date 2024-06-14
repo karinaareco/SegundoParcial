@@ -1,5 +1,6 @@
 package com.example.segundoparcial.presentacion.ciudades
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.segundoparcial.presentacion.clima.climaView
 import com.example.segundoparcial.repository.modelos.Ciudad
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -59,15 +61,19 @@ fun CiudadesView(
             )
 
             when (state) {
-
                 is CiudadesEstado.Cargando -> Text(text = "cargando")
                 is CiudadesEstado.Error -> Text(text = state.mensaje)
-                is CiudadesEstado.Resultado ->  ListaDeCiudades(state.ciudades) {
-                    onAction(
-                        CiudadesIntencion.Seleccionar(it)
-                    )
-                }
+                is CiudadesEstado.Resultado -> ListaDeCiudades(
+                    ciudades = state.ciudades,
+                    onAction = onAction
+                )
                 is CiudadesEstado.Vacio -> Text(text = "")
+                is CiudadesEstado.Exitoso -> climaView(
+                    ciudad = state.ciudad,
+                    temperatura = state.temperatura,
+                    descripcion = state.descripcion,
+                    st = state.st
+                )
             }
 
             Button(
@@ -75,10 +81,9 @@ fun CiudadesView(
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
             ) {
                 Text(
-                    text = "Mostrar Clima",
+                    text = "Seleccionar Ciudad",
                     color = Color.White
                 )
-
             }
             Button(
                 onClick = { onAction(CiudadesIntencion.Buscar(ciudadIngresada)) },
@@ -95,35 +100,49 @@ fun CiudadesView(
 }
 
 
-
-
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ListaDeCiudades(ciudades: Array<Ciudad>, onSelect: (Double)->Unit){
-
-    LazyColumn (
+fun ListaDeCiudades(ciudades: Array<Ciudad>, onAction: (CiudadesIntencion) -> Unit) {
+    LazyColumn(
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        items(items = ciudades){
-            Card (
-
-                onClick = { onSelect(0.0) },
+        verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        items(items = ciudades) {
+            Card(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+                    .clickable {},
+                onClick = { },
                 colors = CardDefaults.cardColors(
                     containerColor = Color.Black
                 )
+            ) {
+                Column(modifier = Modifier.padding(10.dp)) {
+                    Text(
+                        text = it.name,
+                        color = Color.White
+                    )
+                    Text(
+                        text = it.state,
+                        color = Color.White
+                    )
+                    Text(
+                        text = "${it.lat}",
+                        color = Color.White
+                    )
+                    Text(
+                        text = "${it.lon}",
+                        color = Color.White
+                    )
+                    Button(onClick = { onAction(CiudadesIntencion.MostraClima(it)) }) {
+                        Text(text = "Ver Clima")
 
+                    }
 
-            ){
-
-                Text(text = it.name,
-                    color = Color.White)
-                Text(text = it.state,
-                    color = Color.White)
+                }
             }
         }
     }
-
 }
 

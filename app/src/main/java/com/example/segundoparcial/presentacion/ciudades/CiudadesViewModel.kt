@@ -16,11 +16,7 @@ class CiudadesViewModel(
     val respositorio: Repositorio,
     val router: Router
 ) : ViewModel() {
-
-
     var uiState by mutableStateOf<CiudadesEstado>(CiudadesEstado.Vacio)
-
-
 
     val todasLasCiudades = listOf(
         Ciudad("Cordoba", -31.4135000, -64.1810500, "Cordoba Provincia"),
@@ -31,7 +27,6 @@ class CiudadesViewModel(
         Ciudad("Misiones", -31.4135000, -64.1810500, "Paraguay"),
         Ciudad("Buenos Aires", -31.4135000, -64.1810500, "Buenos Aires Provincia"),
     )
-
 
 
     /*fun buscar( ciudadIngresada: String) {
@@ -46,36 +41,58 @@ class CiudadesViewModel(
         }
     }*/
 
-     private fun buscar(ciudadIngresada:String){
+    private fun buscar(ciudadIngresada: String) {
 
         uiState = CiudadesEstado.Cargando
 
-         viewModelScope.launch{
+        viewModelScope.launch {
 
-             try {
-                 val listaDeCiudades = respositorio.buscarCiudad(ciudadIngresada)
-                 uiState = CiudadesEstado.Resultado(listaDeCiudades)
+            try {
+                val listaDeCiudades = respositorio.buscarCiudad(ciudadIngresada)
+                uiState = CiudadesEstado.Resultado(listaDeCiudades)
 
-             }catch (exeption: Exception){
-                 uiState = CiudadesEstado.Error("Error al buscar ciudad")
-             }
+            } catch (exeption: Exception) {
+                uiState = CiudadesEstado.Error("Error al buscar ciudad")
+            }
 
-         }
+        }
 
     }
 
-    fun ejecutarIntencion(intencion: CiudadesIntencion){
-       when(intencion){
-           is CiudadesIntencion.Buscar -> buscar(ciudadIngresada = intencion.nombre)
-           is CiudadesIntencion.Seleccionar -> seleccionar(indice = intencion.indice)
-       }
+    private fun mostraClimaDeCiudad(ciudad: Ciudad) {
+        uiState = CiudadesEstado.Cargando
 
-   }
+        viewModelScope.launch {
+            try {
+                val ciudad = respositorio.traerClima(ciudad)
+                uiState = CiudadesEstado.Exitoso(
+                    ciudad = ciudad.name,
+                    temperatura = ciudad.main.temp,
+                    descripcion = "asd",//clima.weather.first().description,
+                    st = ciudad.main.feelsLike,
+                )
+            } catch (exeption: Exception) {
+                uiState = CiudadesEstado.Error("error")
+            }
+        }
+    }
+
+    fun ejecutarIntencion(intencion: CiudadesIntencion) {
+        when (intencion) {
+            is CiudadesIntencion.Buscar -> buscar(ciudadIngresada = intencion.nombre)
+            is CiudadesIntencion.Seleccionar -> seleccionar(indice = intencion.indice)
+            is CiudadesIntencion.MostraClima -> mostraClimaDeCiudad(ciudad = intencion.ciudad)
+        }
+
+    }
 
     private fun seleccionar(indice: Double) {
         uiState = CiudadesEstado.Vacio
+
         router.navegar(Ruta.Clima())
-    }}
+
+    }
+}
 
 class CiudadesViewModelFactory(
     private val repositorio: Repositorio,
@@ -84,7 +101,7 @@ class CiudadesViewModelFactory(
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(CiudadesViewModel::class.java)) {
-            return CiudadesViewModel(repositorio,router) as T
+            return CiudadesViewModel(repositorio, router) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

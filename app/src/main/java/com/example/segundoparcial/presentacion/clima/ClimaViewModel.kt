@@ -73,10 +73,10 @@ class ClimaViewModel(
         }
     }
 
-    private fun mostrarCiudad(ciudad: Ciudad) {
+    /*private fun mostrarClimaCiudad(ciudad: Ciudad) {
         uiState = ClimaEstado.Cargando
         viewModelScope.launch {
-            //val ciudad = Ciudad(name = ciudad.name, lat = ciudad.lat, lon = ciudad.lon, state = ciudad.state)
+
             try {
                 val clima = respositorio.traerClima(ciudad)
                 uiState = ClimaEstado.Exitoso(
@@ -89,7 +89,7 @@ class ClimaViewModel(
                 uiState = ClimaEstado.Error("error")
             }
         }
-    }
+    }*/
 
     class ClimaViewModelFactory(
         private val repositorio: Repositorio,
