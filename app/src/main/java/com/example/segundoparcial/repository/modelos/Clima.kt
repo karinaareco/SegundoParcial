@@ -20,6 +20,9 @@ data class Clima2(
     val main: Main,
     val visibility: Long,
     val name: String,
+    val clouds :Clouds,
+    val wind :Wind,
+
 )
 @Serializable
 data class Coord(

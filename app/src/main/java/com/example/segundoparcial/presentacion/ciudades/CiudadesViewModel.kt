@@ -68,11 +68,14 @@ class CiudadesViewModel(
                     ciudad = ciudad.name,
                     temperatura = ciudad.main.temp,
                     descripcion = ciudad.main.humidity,
-                    st = ciudad.main.feelsLike
+                    st = ciudad.main.feelsLike,
+                    wind = ciudad.wind.speed,
+                    clouds = ciudad.clouds.all
 
                 )
             } catch (exeption: Exception) {
-                uiState = CiudadesEstado.Error("error")
+                println(exeption)
+                uiState = CiudadesEstado.Error("error 1")
             }
         }
     }

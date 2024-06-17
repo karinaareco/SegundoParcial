@@ -57,7 +57,7 @@ fun CiudadesView(
                 ),
                 label = {
                     Text(
-                        text = "Buscar ubicacion",
+                        text = "Ubicacion",
                         color = Color.White
                     )
                 },
@@ -76,7 +76,9 @@ fun CiudadesView(
                     ciudad = state.ciudad,
                     temperatura = state.temperatura,
                     descripcion = state.descripcion,
-                    st = state.st
+                    st = state.st,
+                    nubes = state.clouds,
+                    viento = state.wind
 
                 )
             }
@@ -87,7 +89,7 @@ fun CiudadesView(
                       colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
                   ) {
                       Text(
-                          text = "Ver Ciudad",
+                          text = "Buscar",
                           color = Color.White
                       )
                   }
@@ -125,11 +127,11 @@ fun ListaDeCiudades(ciudades: Array<Ciudad>, onAction: (CiudadesIntencion) -> Un
                         color = Color.White
                     )
                     Text(
-                        text = "${it.lat}",
+                        text = "Lat:${it.lat}",
                         color = Color.White
                     )
                     Text(
-                        text = "${it.lon}",
+                        text = "Long:${it.lon}",
                         color = Color.White
                     )
                     Button(onClick = { onAction(CiudadesIntencion.MostraClima(it)) },

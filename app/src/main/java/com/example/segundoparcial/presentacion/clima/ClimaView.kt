@@ -90,9 +90,9 @@ fun ClimaView(
                     ciudad = state.ciudad,
                     temperatura = state.temperatura,
                     descripcion = state.descripcion,
-                    st = state.st
-
-
+                    st = state.st,
+                    viento = state.wind,
+                    nubes = state.clouds
                 )
 
                 ClimaEstado.Vacio -> EmptyView()
@@ -147,7 +147,15 @@ fun ErrorView(mensaje: String) {
 }
 
 @Composable
-fun climaView(ciudad: String, temperatura: Double, descripcion: Long, st: Double) {
+fun climaView(
+    ciudad: String,
+    temperatura: Double,
+    descripcion: Long,
+    st: Double,
+    nubes: Long,
+    viento: Double
+
+) {
     Column(
         modifier = Modifier
             .padding(20.dp)
@@ -155,7 +163,7 @@ fun climaView(ciudad: String, temperatura: Double, descripcion: Long, st: Double
     ) {
         Card(
             modifier = Modifier
-                .size(width = 340.dp, height = 150.dp)
+                .size(width = 340.dp, height = 200.dp)
                 .padding(16.dp),
             colors = CardDefaults.cardColors(
                 containerColor = Color.Black
@@ -182,6 +190,17 @@ fun climaView(ciudad: String, temperatura: Double, descripcion: Long, st: Double
                     text = "sensacionTermica: ${st}°",
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color.White
+                )
+                Text(
+                    text = "Nubosidad: ${nubes}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.White
+                )
+                Text(
+                    text = "Viento: ${viento}/km",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.White,
+
                 )
 
 

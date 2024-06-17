@@ -69,9 +69,11 @@ class ClimaViewModel(
                     st = clima.main.feelsLike,
 
 
+
+
                 )
             } catch (exeption: Exception) {
-                uiState = ClimaEstado.Error("error")
+                uiState = ClimaEstado.Error("error trayendo clima")
             }
         }
     }
