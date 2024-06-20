@@ -3,6 +3,8 @@ package com.example.segundoparcial.repository
 
 import com.example.segundoparcial.repository.modelos.Ciudad
 import com.example.segundoparcial.repository.modelos.Clima2
+import com.example.segundoparcial.repository.modelos.ForecastDTO
+import com.example.segundoparcial.repository.modelos.ListForecast
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -26,14 +28,14 @@ class RepositorioApi : Repositorio {
         }
     }
 
-    override suspend fun buscarCiudad(ciudad: String): Array<Ciudad> {
+    override suspend fun buscarCiudad(ciudad: String): List<Ciudad> {
         val respuesta = cliente.get("https://api.openweathermap.org/geo/1.0/direct"){
             parameter("q",ciudad)
             parameter("limit",5)
             parameter("appid",apiKey)
         }
         if (respuesta.status == HttpStatusCode.OK){
-            val ciudades = respuesta.body<Array<Ciudad>>()
+            val ciudades = respuesta.body<List<Ciudad>>()
             return ciudades
         }else{
             throw Exception()
@@ -56,7 +58,19 @@ class RepositorioApi : Repositorio {
         }
     }
 
-    override suspend fun traerPronostico(ciudad: Ciudad): List<Clima2> {
-        TODO("Not yet implemented")
+    override suspend fun traerPronostico(nombre: String): List<ListForecast> {
+
+        val respuesta = cliente.get("https://api.openweathermap.org/data/2.5/forecast"){
+            parameter("q",nombre)
+            parameter("units","metric")
+            parameter("appid",apiKey)
+        }
+        if (respuesta.status == HttpStatusCode.OK){
+            val forecast = respuesta.body<ForecastDTO>()
+            return forecast.list
+        }else{
+            throw Exception()
+        }
+
     }
 }

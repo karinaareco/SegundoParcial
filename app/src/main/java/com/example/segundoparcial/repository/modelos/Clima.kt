@@ -22,6 +22,8 @@ data class Clima2(
     val name: String,
     val clouds :Clouds,
     val wind :Wind,
+    //val icon: String,//lo agregue a ver si ahora se ve el icono pero me da error
+
 
 )
 @Serializable
@@ -49,7 +51,7 @@ data class Main(
 data class Wind(
     val speed: Double,
     val deg: Long,
-    val gust: Double,
+    //val gust: Double,
 )
 
 @Serializable

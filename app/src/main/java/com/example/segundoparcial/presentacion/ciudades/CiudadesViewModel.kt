@@ -58,25 +58,38 @@ class CiudadesViewModel(
 
     }
 
+    private fun mostrarPronostico(nombre: String) {
+        uiState = CiudadesEstado.Cargando
+        viewModelScope.launch {
+            try {
+                val forecast = respositorio.traerPronostico(nombre)
+                uiState = CiudadesEstado.okClima(forecast)
+            } catch (exception: Exception) {
+                uiState = CiudadesEstado.Error(exception.localizedMessage ?: "error desconocido")
+            }
+        }
+
+    }
+
     private fun mostraClimaDeCiudad(ciudad: Ciudad) {
         uiState = CiudadesEstado.Cargando
 
         viewModelScope.launch {
-            try {
-                val ciudad = respositorio.traerClima(ciudad)
+            //try {
+                val clima2 = respositorio.traerClima(ciudad)
                 uiState = CiudadesEstado.Exitoso(
-                    ciudad = ciudad.name,
-                    temperatura = ciudad.main.temp,
-                    descripcion = ciudad.main.humidity,
-                    st = ciudad.main.feelsLike,
-                    wind = ciudad.wind.speed,
-                    clouds = ciudad.clouds.all
-
-                )
-            } catch (exeption: Exception) {
+                    ciudad = clima2.name,
+                    temperatura = clima2.main.temp,
+                    descripcion = clima2.main.humidity,
+                    st = clima2.main.feelsLike,
+                    wind = clima2.wind.speed,
+                    clouds = clima2.clouds.all,
+                    icon = clima2.weather.first().icon,
+                    )
+            /*} catch (exeption: Exception) {
                 println(exeption)
                 uiState = CiudadesEstado.Error("error 1")
-            }
+            }*/
         }
     }
 
@@ -85,12 +98,15 @@ class CiudadesViewModel(
             is CiudadesIntencion.Buscar -> buscar(ciudadIngresada = intencion.nombre)
 
             is CiudadesIntencion.MostraClima -> mostraClimaDeCiudad(ciudad = intencion.ciudad)
+
+            is CiudadesIntencion.MostraPronostico -> mostrarPronostico(nombre = intencion.nombre)
         }
 
     }
 
 
 }
+
 
 class CiudadesViewModelFactory(
     private val repositorio: Repositorio,

@@ -1,4 +1,4 @@
-package com.example.segundoparcial.presentacion.clima
+package com.example.segundoparcial.presentacion.clima.actual
 
 
 import androidx.compose.foundation.Image
@@ -29,10 +29,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.segundoparcial.R
 import com.example.segundoparcial.ui.theme.SegundoParcialTheme
 
@@ -92,7 +95,8 @@ fun ClimaView(
                     descripcion = state.descripcion,
                     st = state.st,
                     viento = state.wind,
-                    nubes = state.clouds
+                    nubes = state.clouds,
+                    icon = state.icon
                 )
 
                 ClimaEstado.Vacio -> EmptyView()
@@ -153,9 +157,12 @@ fun climaView(
     descripcion: Long,
     st: Double,
     nubes: Long,
-    viento: Double
+    viento: Double,
+    icon: String,
 
-) {
+    ) {
+
+    val iconUrl = "https://openweathermap.org/img/wn/$icon@2x.png"
     Column(
         modifier = Modifier
             .padding(20.dp)
@@ -163,7 +170,7 @@ fun climaView(
     ) {
         Card(
             modifier = Modifier
-                .size(width = 340.dp, height = 200.dp)
+                .size(width = 340.dp, height = 300.dp)
                 .padding(16.dp),
             colors = CardDefaults.cardColors(
                 containerColor = Color.Black
@@ -181,6 +188,19 @@ fun climaView(
                     style = MaterialTheme.typography.titleLarge,
                     color = Color.White
                 )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(iconUrl)
+                            .crossfade(true) // Efecto de fundido
+                            .build(),
+                        contentDescription = "Weather Icon",
+                        modifier = Modifier.size(70.dp),
+                        //colorFilter = ColorFilter.tint(Color.White)
+
+                    )
+
+                }
                 Text(
                     text = "Humedad: ${descripcion} %",
                     style = MaterialTheme.typography.bodyMedium,
@@ -201,7 +221,7 @@ fun climaView(
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color.White,
 
-                )
+                    )
 
 
             }

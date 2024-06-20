@@ -26,7 +26,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import com.example.segundoparcial.presentacion.clima.climaView
+import com.example.segundoparcial.presentacion.clima.actual.climaView
+import com.example.segundoparcial.presentacion.clima.pronostico.PronosticoView
 import com.example.segundoparcial.repository.modelos.Ciudad
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -78,9 +79,12 @@ fun CiudadesView(
                     descripcion = state.descripcion,
                     st = state.st,
                     nubes = state.clouds,
-                    viento = state.wind
+                    viento = state.wind,
+                    icon = state.icon
 
                 )
+                is CiudadesEstado.okClima-> PronosticoView(state.climas)
+
             }
 
                   Button(
@@ -94,6 +98,7 @@ fun CiudadesView(
                       )
                   }
 
+
         }
     }
 }
@@ -101,7 +106,7 @@ fun CiudadesView(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ListaDeCiudades(ciudades: Array<Ciudad>, onAction: (CiudadesIntencion) -> Unit) {
+fun ListaDeCiudades(ciudades: List<Ciudad>, onAction: (CiudadesIntencion) -> Unit) {
     LazyColumn(
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp)
@@ -139,6 +144,10 @@ fun ListaDeCiudades(ciudades: Array<Ciudad>, onAction: (CiudadesIntencion) -> Un
                         Text(text = "Ver Clima",
                             color = Color.Black)
 
+                    }
+                    Button(onClick = { onAction(CiudadesIntencion.MostraPronostico(it.name)) }) {
+                        Text(text = "Pronostico de la semana")
+                        
                     }
 
                 }

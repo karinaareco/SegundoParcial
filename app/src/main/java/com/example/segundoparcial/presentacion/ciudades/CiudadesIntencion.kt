@@ -9,5 +9,7 @@ sealed class CiudadesIntencion {
 
     data class MostraClima (val ciudad: Ciudad): CiudadesIntencion()
 
+    data class MostraPronostico (val nombre: String): CiudadesIntencion()
+
 
 }

@@ -1,6 +1,4 @@
-package com.example.segundoparcial.presentacion.clima
-
-import com.example.segundoparcial.presentacion.ciudades.CiudadesIntencion
+package com.example.segundoparcial.presentacion.clima.actual
 
 sealed  class ClimaIntencion {
     object BorrarTodo: ClimaIntencion()
