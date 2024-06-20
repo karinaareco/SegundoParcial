@@ -196,7 +196,7 @@ fun climaView(
                             .build(),
                         contentDescription = "Weather Icon",
                         modifier = Modifier.size(70.dp),
-                        //colorFilter = ColorFilter.tint(Color.White)
+                       
 
                     )
 

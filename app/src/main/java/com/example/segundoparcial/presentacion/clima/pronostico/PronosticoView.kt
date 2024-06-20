@@ -24,8 +24,8 @@ import com.example.segundoparcial.repository.modelos.ListForecast
 @Composable
 fun PronosticoView(
     modifier: Modifier = Modifier,
-    state : PronosticoEstado,
-    onAction: (PronosticoIntencion)->Unit
+    state: PronosticoEstado,
+    onAction: (PronosticoIntencion) -> Unit
 ) {
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
         onAction(PronosticoIntencion.actualizarClima)
@@ -36,7 +36,7 @@ fun PronosticoView(
             .padding(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        when(state){
+        when (state) {
             is PronosticoEstado.Error -> ErrorView(mensaje = state.mensaje)
             is PronosticoEstado.Exitoso -> PronosticoView(state.climas)
             PronosticoEstado.Vacio -> LoadingView()
@@ -47,38 +47,54 @@ fun PronosticoView(
 }
 
 @Composable
-fun EmptyView(){
+fun EmptyView() {
     Text(text = "No hay nada que mostrar")
 }
 
 @Composable
-fun LoadingView(){
+fun LoadingView() {
     Text(text = "Cargando")
 }
 
 @Composable
-fun ErrorView(mensaje: String){
+fun ErrorView(mensaje: String) {
     Text(text = mensaje)
 }
 
 @Composable
-fun PronosticoView(climas: List<ListForecast>){
+fun PronosticoView(climas: List<ListForecast>) {
     LazyColumn {
         items(items = climas) {
-            Card(modifier = Modifier
-                .size(width = 340.dp, height = 200.dp)
-                .padding(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.Black)) {
+            Card(
+                modifier = Modifier
+                    .size(width = 340.dp, height = 200.dp)
+                    .padding(16.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.Black)
+            ) {
+                Column (modifier = Modifier.padding(10.dp)){
+                    Text(
+                        text = "Temperatura: ${it.main.temp}",
+                        color = Color.White
+                    )
+                    Spacer(modifier = Modifier.padding(5.dp))
+                    Text(
+                        text = "Humedad: ${it.main.humidity} %",
+                        color = Color.White
+                    )
+                    Spacer(modifier = Modifier.padding(5.dp))
+                    Text(
+                        text = "Temperatura max: ${it.main.temp_max}",
+                        color = Color.White
+                    )
+                    Spacer(modifier = Modifier.padding(5.dp))
+                    Text(
+                        text = "Temperatura min: ${it.main.temp_min}",
+                        color = Color.White
+                    )
 
-                Text(text = "Temperatura: ${it.main.temp}",
-                    color = Color.White)
+                }
 
-                Text(text = "Humedad: ${it.main.humidity} %",
-                    color = Color.White)
-                Text(text = "Temperatura max: ${it.main.temp_max}",
-                    color = Color.White)
-                Text(text = "Temperatura min: ${it.main.temp_min}",
-                    color = Color.White)
+
 
             }
         }

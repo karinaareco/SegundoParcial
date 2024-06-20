@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -139,16 +140,22 @@ fun ListaDeCiudades(ciudades: List<Ciudad>, onAction: (CiudadesIntencion) -> Uni
                         text = "Long:${it.lon}",
                         color = Color.White
                     )
-                    Button(onClick = { onAction(CiudadesIntencion.MostraClima(it)) },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.White)) {
-                        Text(text = "Ver Clima",
-                            color = Color.Black)
+                    Row {
+                        Button(onClick = { onAction(CiudadesIntencion.MostraClima(it)) },
+                            colors = ButtonDefaults.buttonColors(containerColor = Color.White)) {
+                            Text(text = "Ver Clima",
+                                color = Color.Black)
+
+                        }
+                        Button(onClick = { onAction(CiudadesIntencion.MostraPronostico(it.name)) },
+                            colors = ButtonDefaults.buttonColors(containerColor = Color.White)) {
+                            Text(text = "Pronostico de la semana",
+                                color = Color.Black)
+
+                        }
 
                     }
-                    Button(onClick = { onAction(CiudadesIntencion.MostraPronostico(it.name)) }) {
-                        Text(text = "Pronostico de la semana")
-                        
-                    }
+
 
                 }
             }
